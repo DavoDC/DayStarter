@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\David\GitHub Repos\DayStarter\Project\dist\DayStarter.jar</jar>
+  <outfile>C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine>C:\Users\David\Google_Drive\Personal\Tasks\Templates\Uni_Time_Templates C:\Users\David\Google_Drive\Personal\Tasks</cmdLine>
+  <chdir>-</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\David\GitHub Repos\DayStarter\Launch4J Config\DSicon.ico</icon>
+  <singleInstance>
+    <mutexName>CC</mutexName>
+    <windowTitle>CodyClicker</windowTitle>
+  </singleInstance>
+  <jre>
+    <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>2.0</minVersion>
+    <maxVersion>50.0</maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+  </jre>
+  <messages>
+    <startupErr>An error occurred while starting the application.</startupErr>
+    <bundledJreErr>This application was configured to use a bundled Java Runtime Environment but the runtime is missing or corrupted.</bundledJreErr>
+    <jreVersionErr>This application requires Java (JRE)</jreVersionErr>
+    <launcherErr>The registry refers to a nonexistent Java Runtime Environment installation or the runtime is corrupted.</launcherErr>
+    <instanceAlreadyExistsMsg>An application instance is already running.</instanceAlreadyExistsMsg>
+  </messages>
+</launch4jConfig>
