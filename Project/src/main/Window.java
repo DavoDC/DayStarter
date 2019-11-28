@@ -1,22 +1,26 @@
+package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.io.IOException;
 import javax.swing.JComboBox;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 /**
- * Main class and GUI for DayStarter
+ * Entry class and GUI
  *
  * @author David C
  */
 public class Window extends javax.swing.JFrame {
 
     // Version
-    public static final double VERSION = 1.0;
+    public static final double VERSION = 1.1;
 
     // Main objects
     private static Code code;
@@ -32,41 +36,37 @@ public class Window extends javax.swing.JFrame {
         // Set look and feel
         try {
             UIManager.setLookAndFeel(new NimbusLookAndFeel());
-        } catch (Exception e) {
+        } catch (UnsupportedLookAndFeelException e) {
             System.err.print(e.toString());
             System.exit(1);
         }
 
         // Create GUI
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                // Initialize GUI and tools
+                gui = new Window();
+                code = new Code(gui, args);
 
-                try {
-                    // Initialize GUI and tools
-                    gui = new Window();
-                    code = new Code(gui, args);
+                // Make adjustments to frame
+                gui.setVisible(true);
+                gui.setTitle("DayStarter V" + VERSION + " - by David C, 2019");
 
-                    // Make adjustments to frame
-                    gui.setVisible(true);
-                    gui.setTitle("DayStarter V" + VERSION + " - by David C, 2019");
+                Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+                int frameXPos = ((int) screen.getWidth() / 2) - (gui.getWidth() / 2);
+                gui.setLocation(frameXPos, 39);
 
-                    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-                    int frameXPos = ((int) screen.getWidth() / 2) - (gui.getWidth() / 2);
-                    gui.setLocation(frameXPos, 39);
+                gui.setResizable(false);
+                gui.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-                    gui.setResizable(false);
-                    gui.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                // Setup list of possible template options
+                code.loadTemplates();
 
-                    // Setup list of possible template options
-                    code.loadTemplates();
-
-                } catch (Exception e) {
-                    System.err.print(e.toString());
-                    System.exit(1);
-                }
+            } catch (HeadlessException | IOException e) {
+                System.err.print(e.toString());
+                System.exit(1);
             }
-        }
-        );
+        });
 
     }
 
@@ -121,13 +121,14 @@ public class Window extends javax.swing.JFrame {
         jMenuItem6.setText("jMenuItem6");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(760, 440));
+        setPreferredSize(new java.awt.Dimension(800, 450));
         setResizable(false);
-        setSize(new java.awt.Dimension(800, 400));
+        setSize(new java.awt.Dimension(800, 450));
 
         panel.setBackground(new java.awt.Color(255, 182, 81));
         panel.setForeground(new java.awt.Color(255, 255, 255));
         panel.setName("panel"); // NOI18N
+        panel.setPreferredSize(new java.awt.Dimension(800, 450));
 
         title.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
         title.setForeground(new java.awt.Color(0, 0, 0));
@@ -196,25 +197,28 @@ public class Window extends javax.swing.JFrame {
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLayout.createSequentialGroup()
+                .addGap(218, 218, 218)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(question1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(192, 192, 192)
-                        .addComponent(question1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(261, 261, 261)
-                        .addComponent(tempBut, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(218, 218, 218)
-                        .addComponent(question2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(245, 245, 245)
-                        .addComponent(tmrwBut, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(startBut, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(16, 16, 16)
+                        .addComponent(question2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 210, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(153, 153, 153))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                        .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(185, 185, 185))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                        .addComponent(tempBut, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(275, 275, 275))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                        .addComponent(tmrwBut, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(254, 254, 254))))
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(startBut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,9 +232,9 @@ public class Window extends javax.swing.JFrame {
                 .addComponent(question2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tmrwBut, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addGap(37, 37, 37)
                 .addComponent(startBut, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         jMenuBar1.setBorder(null);
@@ -244,9 +248,10 @@ public class Window extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -291,6 +296,9 @@ public class Window extends javax.swing.JFrame {
         // Rename template made
         code.renameTemplate(tempName, newName);
 
+        // Save last choice made
+        code.saveLastChoice(tempS);
+
         // Finish normally
         System.exit(0);
     }//GEN-LAST:event_startButAction
@@ -298,7 +306,6 @@ public class Window extends javax.swing.JFrame {
     private void tempButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tempButActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tempButActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

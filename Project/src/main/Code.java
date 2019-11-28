@@ -1,3 +1,4 @@
+package main;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -6,11 +7,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
@@ -19,18 +24,20 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 
 /**
- * Contains methods to help with GUI processing
+ * Contains 'back-end' methods
  *
  * @author David C
  */
 public class Code {
 
     // Current GUI frame
-    private JFrame frame;
+    private final JFrame frame;
 
-    // Directory path
+    // Path strings
     private static String src;
     private static String dest;
+    private String lastChoicePathS;
+    private Path lastChoicePath;
 
     /**
      * Create a code object
@@ -51,9 +58,11 @@ public class Code {
             throw new IllegalArgumentException(errMsg);
         }
 
-        // Save arguments
+        // Use arguments to initialize path strings
         src = args[0].replace("_", " ");
         dest = args[1].replace("_", " ");
+        lastChoicePathS = dest + "\\lastChoice.txt";
+        lastChoicePath = Paths.get(lastChoicePathS);
 
         // If they are not both folders
         File srcF = new File(src);
@@ -94,8 +103,13 @@ public class Code {
             index++;
         }
 
-        // Put options into combo box
+        // Put options into combo box model
         ComboBoxModel optCBM = new JComboBox(options).getModel();
+
+        // Load last choice
+        loadLastChoice(optCBM);
+
+        // Load combo box model into combo box
         ((JComboBox) getComponentByName("tempBut")).setModel(optCBM);
     }
 
@@ -106,6 +120,7 @@ public class Code {
      * @return
      */
     public Component getComponentByName(String nameQuery) {
+
         // Return variable
         Component comp = null;
 
@@ -133,6 +148,7 @@ public class Code {
      *
      * @param tempName
      * @param tomorrow
+     * @return
      */
     public String getNewName(String tempName, boolean tomorrow) {
 
@@ -195,11 +211,11 @@ public class Code {
     }
 
     /**
-     * Run the inputted DOS command
+     * Run the inputted DOS command and return error output
      *
      * @param command
      */
-    private void runCommand(String command) {
+    private String runCommand(String command) {
 
         // Create command list
         ArrayList<String> cmdList = new ArrayList<>();
@@ -214,30 +230,34 @@ public class Code {
             Process p = pb.start();
 
             // TEST
-            // Print info
+            // Print command
             System.out.println("command: \n" + command);
 
+            // Get error output
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(p.getErrorStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+            String errOut = "";
+            String curLine;
+            while ((curLine = reader.readLine()) != null) {
+                errOut += " " + curLine;
             }
 
-            BufferedReader reader2 = new BufferedReader(
-                    new InputStreamReader(p.getInputStream()));
-            String line2;
-            while ((line2 = reader2.readLine()) != null) {
-                System.out.println(line2);
-            }
+            // TEST
+            // Print error output
+            System.out.println("error output:" + errOut);
 
-        } catch (Exception e) {
+            // Return error output
+            return errOut;
+
+        } catch (IOException e) {
 
             // Print error info and exit
             System.err.print(e.toString());
             System.exit(1);
         }
 
+        // Return empty
+        return "";
     }
 
     /**
@@ -256,7 +276,95 @@ public class Code {
      * @param newName
      */
     public void renameTemplate(String tempName, String newName) {
-        runCommand("rename \"" + dest + tempName + "\" \"" + newName + "\"");
+
+        // Create command string
+        String commStr = "rename \"" + dest + tempName + "\" \"" + newName + "\"";
+
+        // Run command and save output
+        String errOut = runCommand(commStr);
+
+        // If output indicates duplicate error
+        if (errOut.contains("duplicate")) {
+
+            // This means the template already exists,
+            // so delete the intermediate file
+            try {
+                Files.delete(Paths.get(dest + tempName));
+
+            } catch (IOException ex) {
+                Logger.getLogger(Code.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    /**
+     * Returns true if the last choice file already exists, and false otherwise
+     *
+     * @return
+     */
+    private boolean lastChoiceExists() {
+
+        // Attempt to load last choice file
+        File lcFile = new File(lastChoicePathS);
+
+        // Return whether it is a valid file
+        return lcFile.isFile();
+    }
+
+    /**
+     * Retrieves a choice from a text file into a Combo Box Model
+     *
+     * @param cbm
+     */
+    private void loadLastChoice(ComboBoxModel cbm) {
+
+        // If the program has been run before
+        if (lastChoiceExists()) {
+
+            // Retrieve the choice
+            // Initialize to first
+            String choice = (String) cbm.getElementAt(0);
+            try {
+
+                // Replace with value from file
+                choice = Files.readString(lastChoicePath);
+            } catch (IOException ex) {
+                Logger.getLogger(Code.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            // Make it the initial selection
+            cbm.setSelectedItem((Object) choice);
+        }
+    }
+
+    /**
+     * Saves the given choice into a text file
+     *
+     * @param choice
+     */
+    public void saveLastChoice(String choice) {
+        try {
+
+            // If last choice exists
+            if (lastChoiceExists()) {
+
+                // Delete it 
+                Files.delete(lastChoicePath);
+            }
+
+            // Recreate the file and write choice to it
+            Files.writeString(lastChoicePath, choice, CREATE_NEW);
+
+            // Make file hidden
+            Files.setAttribute(lastChoicePath, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
+
+        } catch (IOException e) {
+
+            // Print error info and exit
+            System.err.println(e.toString());
+            System.exit(1);
+        }
+
     }
 
 }

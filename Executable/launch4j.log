@@ -1639,3 +1639,213 @@ Launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe
 Launcher args:	-jar "C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe" C:\Users\David\Google_Drive\Personal\Tasks\Templates\Uni_Time_Templates C:\Users\David\Google_Drive\Personal\Tasks
 Args length:	186/32768 chars
 Exit code:	0
+
+
+Version:	3.12
+CmdLine:	C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe --l4j-debug
+WOW64:		yes
+Create mutex:	CC
+Working dir:	C:\Users\David\GitHub Repos\DayStarter\Executable\-
+Java min ver:	1.002.000
+Java max ver:	1.050.000
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+32-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_231
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000_231
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+32-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+64-bit search:	SOFTWARE\JavaSoft\JRE...
+32-bit search:	SOFTWARE\JavaSoft\JRE...
+64-bit search:	SOFTWARE\JavaSoft\JDK...
+Check:		SOFTWARE\JavaSoft\JDK\13.0.1
+Check launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe (OK)
+Match:		1.013.000_001
+Runtime used:	1.013.000_001 (64-bit)
+Launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe
+Launcher args:	-jar "C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe" C:\Users\David\Google_Drive\Personal\Tasks\Templates\Uni_Time_Templates C:\Users\David\Google_Drive\Personal\Tasks
+Args length:	186/32768 chars
+Exit code:	0
+
+
+Version:	3.12
+CmdLine:	C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe --l4j-debug
+WOW64:		yes
+Create mutex:	CC
+Working dir:	C:\Users\David\GitHub Repos\DayStarter\Executable\-
+Java min ver:	1.002.000
+Java max ver:	1.050.000
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+32-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_231
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000_231
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+32-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+64-bit search:	SOFTWARE\JavaSoft\JRE...
+32-bit search:	SOFTWARE\JavaSoft\JRE...
+64-bit search:	SOFTWARE\JavaSoft\JDK...
+Check:		SOFTWARE\JavaSoft\JDK\13.0.1
+Check launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe (OK)
+Match:		1.013.000_001
+Runtime used:	1.013.000_001 (64-bit)
+Launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe
+Launcher args:	-jar "C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe" C:\Users\David\Google_Drive\Personal\Tasks\Templates\Uni_Time_Templates C:\Users\David\Google_Drive\Personal\Tasks
+Args length:	186/32768 chars
+Exit code:	0
+
+
+Version:	3.12
+CmdLine:	C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe --l4j-debug
+WOW64:		yes
+Create mutex:	CC
+Working dir:	C:\Users\David\GitHub Repos\DayStarter\Executable\-
+Java min ver:	1.002.000
+Java max ver:	1.050.000
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+32-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_231
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000_231
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+32-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+64-bit search:	SOFTWARE\JavaSoft\JRE...
+32-bit search:	SOFTWARE\JavaSoft\JRE...
+64-bit search:	SOFTWARE\JavaSoft\JDK...
+Check:		SOFTWARE\JavaSoft\JDK\13.0.1
+Check launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe (OK)
+Match:		1.013.000_001
+Runtime used:	1.013.000_001 (64-bit)
+Launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe
+Launcher args:	-jar "C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe" C:\Users\David\Google_Drive\Personal\Tasks\Templates\Uni_Time_Templates C:\Users\David\Google_Drive\Personal\Tasks
+Args length:	186/32768 chars
+Exit code:	0
+
+
+Version:	3.12
+CmdLine:	C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe --l4j-debug
+WOW64:		yes
+Create mutex:	CC
+Working dir:	C:\Users\David\GitHub Repos\DayStarter\Executable\-
+Java min ver:	1.002.000
+Java max ver:	1.050.000
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+32-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_231
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000_231
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+32-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+64-bit search:	SOFTWARE\JavaSoft\JRE...
+32-bit search:	SOFTWARE\JavaSoft\JRE...
+64-bit search:	SOFTWARE\JavaSoft\JDK...
+Check:		SOFTWARE\JavaSoft\JDK\13.0.1
+Check launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe (OK)
+Match:		1.013.000_001
+Runtime used:	1.013.000_001 (64-bit)
+Launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe
+Launcher args:	-jar "C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe" C:\Users\David\Google_Drive\Personal\Tasks\Templates\Uni_Time_Templates C:\Users\David\Google_Drive\Personal\Tasks
+Args length:	186/32768 chars
+Exit code:	0
+
+
+Version:	3.12
+CmdLine:	C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe --l4j-debug
+WOW64:		yes
+Create mutex:	CC
+Working dir:	C:\Users\David\GitHub Repos\DayStarter\Executable\-
+Java min ver:	1.002.000
+Java max ver:	1.050.000
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+32-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_231
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000_231
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+32-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+64-bit search:	SOFTWARE\JavaSoft\JRE...
+32-bit search:	SOFTWARE\JavaSoft\JRE...
+64-bit search:	SOFTWARE\JavaSoft\JDK...
+Check:		SOFTWARE\JavaSoft\JDK\13.0.1
+Check launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe (OK)
+Match:		1.013.000_001
+Runtime used:	1.013.000_001 (64-bit)
+Launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe
+Launcher args:	-jar "C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe" C:\Users\David\Google_Drive\Personal\Tasks\Templates\Uni_Time_Templates C:\Users\David\Google_Drive\Personal\Tasks
+Args length:	186/32768 chars
+Exit code:	0
+
+
+Version:	3.12
+CmdLine:	C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe --l4j-debug
+WOW64:		yes
+Create mutex:	DayStarter
+Working dir:	C:\Users\David\GitHub Repos\DayStarter\Executable\-
+Java min ver:	1.002.000
+Java max ver:	1.100.000
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+32-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_231
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000_231
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+32-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+64-bit search:	SOFTWARE\JavaSoft\JRE...
+32-bit search:	SOFTWARE\JavaSoft\JRE...
+64-bit search:	SOFTWARE\JavaSoft\JDK...
+Check:		SOFTWARE\JavaSoft\JDK\13.0.1
+Check launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe (OK)
+Match:		1.013.000_001
+Runtime used:	1.013.000_001 (64-bit)
+Launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe
+Launcher args:	-jar "C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe" C:\Users\David\Google_Drive\Personal\Tasks\Templates\Uni_Time_Templates C:\Users\David\Google_Drive\Personal\Tasks
+Args length:	186/32768 chars
+Exit code:	0
+
+
+Version:	3.12
+CmdLine:	C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe --l4j-debug
+WOW64:		yes
+Create mutex:	DayStarter
+Working dir:	C:\Users\David\GitHub Repos\DayStarter\Executable\-
+Java min ver:	1.002.000
+Java max ver:	1.100.000
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+32-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_231
+Check launcher:	C:\Program Files (x86)\Java\jre1.8.0_231\bin\javaw.exe (OK)
+Match:		1.008.000_231
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+32-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+64-bit search:	SOFTWARE\JavaSoft\JRE...
+32-bit search:	SOFTWARE\JavaSoft\JRE...
+64-bit search:	SOFTWARE\JavaSoft\JDK...
+Check:		SOFTWARE\JavaSoft\JDK\13.0.1
+Check launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe (OK)
+Match:		1.013.000_001
+Runtime used:	1.013.000_001 (64-bit)
+Launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe
+Launcher args:	-jar "C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe" C:\Users\David\Google_Drive\Personal\Tasks\Templates\Uni_Time_Templates C:\Users\David\Google_Drive\Personal\Tasks
+Args length:	186/32768 chars
+Exit code:	0
