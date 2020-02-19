@@ -20,7 +20,7 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 public class Window extends javax.swing.JFrame {
 
     // Version
-    public static final double VERSION = 1.1;
+    public static final double VERSION = 1.2;
 
     // Main objects
     private static Code code;
@@ -99,9 +99,10 @@ public class Window extends javax.swing.JFrame {
         javax.swing.JLabel title = new javax.swing.JLabel();
         javax.swing.JButton startBut = new javax.swing.JButton();
         javax.swing.JLabel question1 = new javax.swing.JLabel();
-        javax.swing.JComboBox<String> tempBut = new javax.swing.JComboBox<>();
+        javax.swing.JComboBox<String> combo2 = new javax.swing.JComboBox<>();
         javax.swing.JLabel question2 = new javax.swing.JLabel();
         javax.swing.JToggleButton tmrwBut = new javax.swing.JToggleButton();
+        javax.swing.JComboBox<String> combo1 = new javax.swing.JComboBox<>();
         javax.swing.JMenuBar jMenuBar1 = new javax.swing.JMenuBar();
 
         jMenu3.setText("File");
@@ -160,14 +161,14 @@ public class Window extends javax.swing.JFrame {
         question1.setText("What's happening today ?");
         question1.setName("question1"); // NOI18N
 
-        tempBut.setBackground(new java.awt.Color(255, 204, 0));
-        tempBut.setFont(new java.awt.Font("Cambria", 0, 18)); // NOI18N
-        tempBut.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Temp1", "Temp2", "Temp3" }));
-        tempBut.setBorder(null);
-        tempBut.setName("tempBut"); // NOI18N
-        tempBut.addActionListener(new java.awt.event.ActionListener() {
+        combo2.setBackground(new java.awt.Color(255, 204, 0));
+        combo2.setFont(new java.awt.Font("Cambria", 0, 18)); // NOI18N
+        combo2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "None" }));
+        combo2.setBorder(null);
+        combo2.setName("combo2"); // NOI18N
+        combo2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tempButActionPerformed(evt);
+                combo2ActionPerformed(evt);
             }
         });
 
@@ -192,6 +193,17 @@ public class Window extends javax.swing.JFrame {
             }
         });
 
+        combo1.setBackground(new java.awt.Color(255, 204, 0));
+        combo1.setFont(new java.awt.Font("Cambria", 0, 18)); // NOI18N
+        combo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "None" }));
+        combo1.setBorder(null);
+        combo1.setName("combo1"); // NOI18N
+        combo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
@@ -203,22 +215,23 @@ public class Window extends javax.swing.JFrame {
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(question2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 210, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(203, Short.MAX_VALUE)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                         .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(185, 185, 185))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                        .addComponent(tempBut, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(275, 275, 275))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
                         .addComponent(tmrwBut, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(254, 254, 254))))
-            .addGroup(panelLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(startBut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(startBut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                .addGap(102, 102, 102)
+                .addComponent(combo1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(89, 89, 89)
+                .addComponent(combo2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,7 +240,9 @@ public class Window extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(question1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tempBut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(combo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(combo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addComponent(question2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -281,8 +296,32 @@ public class Window extends javax.swing.JFrame {
      */
     private void startButAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButAction
 
+        // Holder
+        String choices = "";
+
+        // Process combo boxes and save choices
+        choices += processComboBox(1);
+        choices += ",";
+        choices += processComboBox(2);
+
+        // Save choices made
+        code.saveChoices(choices);
+
+        // Finish normally
+        System.exit(0);
+    }//GEN-LAST:event_startButAction
+
+    /**
+     * Process a given combo box
+     *
+     * @param CBnum
+     * @return
+     */
+    private String processComboBox(int CBnum) {
+
         // Get path to template selected
-        JComboBox tempBut = (JComboBox) code.getComponentByName("tempBut");
+        String CBname = code.getCBName(CBnum);
+        JComboBox tempBut = (JComboBox) code.getComponentByName(CBname);
         String tempS = (String) tempBut.getModel().getSelectedItem();
         String tempName = "\\" + tempS + "T.docx";
 
@@ -296,16 +335,17 @@ public class Window extends javax.swing.JFrame {
         // Rename template made
         code.renameTemplate(tempName, newName);
 
-        // Save last choice made
-        code.saveLastChoice(tempS);
+        // Return choice
+        return tempS;
+    }
 
-        // Finish normally
-        System.exit(0);
-    }//GEN-LAST:event_startButAction
-
-    private void tempButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tempButActionPerformed
+    private void combo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tempButActionPerformed
+    }//GEN-LAST:event_combo2ActionPerformed
+
+    private void combo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
