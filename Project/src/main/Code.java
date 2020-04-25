@@ -14,6 +14,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -213,7 +214,7 @@ public class Code {
      *
      * @throws java.io.IOException If path is not found
      */
-    public void loadTemplates() throws IOException {
+    public void loadOptions() throws IOException {
 
         // Get paths of the Word documents in the source folder
         Stream<Path> walk = Files.walk(Paths.get(src));
@@ -237,9 +238,15 @@ public class Code {
             index++;
         }
 
-        // Initialize combo boxes
+        // Initialize left combo box
         initComboBox(options, 1, "Default");
-        initComboBox(options, 2, "None");
+
+        // Add none option and init right combo box
+        String[] none = {"None"};
+        String[] options2 = Stream.concat(
+                Arrays.stream(none), Arrays.stream(options))
+                .toArray(String[]::new);
+        initComboBox(options2, 2, "None");
     }
 
     /**

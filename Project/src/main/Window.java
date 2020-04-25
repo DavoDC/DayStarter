@@ -60,7 +60,7 @@ public class Window extends javax.swing.JFrame {
                 gui.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
                 // Setup list of possible template options
-                code.loadTemplates();
+                code.loadOptions();
 
             } catch (HeadlessException | IOException e) {
                 System.err.print(e.toString());
