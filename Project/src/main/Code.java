@@ -40,6 +40,9 @@ public class Code {
     private String lastChoicePathS;
     private Path lastChoicePath;
 
+    // Combo prefix
+    public static final String comboPrefix = "combo";
+
     /**
      * Create a code object
      *
@@ -299,7 +302,7 @@ public class Code {
         }
 
         // Retrieve actual combo box and load in options (with default set)
-        String CBName = getCBName(boxInd);
+        String CBName = comboPrefix + boxInd;
         ((JComboBox) getComponentByName(CBName)).setModel(cbm);
     }
 
@@ -395,16 +398,6 @@ public class Code {
 
         // Return whether it is a valid file
         return lcFile.isFile();
-    }
-
-    /**
-     * Get name of a combo box given its number
-     *
-     * @param comboBoxNum
-     * @return
-     */
-    public String getCBName(int comboBoxNum) {
-        return "combo" + comboBoxNum;
     }
 
     /**

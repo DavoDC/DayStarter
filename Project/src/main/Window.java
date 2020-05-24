@@ -320,7 +320,7 @@ public class Window extends javax.swing.JFrame {
     private String processComboBox(int CBnum) {
 
         // Get path to template selected
-        String CBname = code.getCBName(CBnum);
+        String CBname = Code.comboPrefix + CBnum;
         JComboBox tempBut = (JComboBox) code.getComponentByName(CBname);
         String tempS = (String) tempBut.getModel().getSelectedItem();
         String tempName = "\\" + tempS + "T.docx";
