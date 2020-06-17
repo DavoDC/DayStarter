@@ -1,28 +1,20 @@
 package main;
 
 import java.awt.Component;
-import java.awt.Container;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JRootPane;
+import javax.swing.JToggleButton;
 
 /**
  * Contains 'back-end' methods
@@ -31,42 +23,51 @@ import javax.swing.JRootPane;
  */
 public class Code {
 
-    // Current GUI frame
-    private final JFrame frame;
+    // Configuration
+    private final String configPathS = ".//" + GUI.PROGRAM + "Config.ini";
+    private final String configFormat = "TemplateFolder,,,DestFolder";
 
     // Path strings
     private static String src;
     private static String dest;
-    private String lastChoicePathS;
-    private Path lastChoicePath;
 
-    // Combo prefix
-    public static final String comboPrefix = "combo";
+    // Swing session
+    private SessionHandler sessH;
 
     /**
      * Create a code object
-     *
-     * @param frame The GUI frame object
-     * @param args The arguments passed to the program
      */
-    public Code(JFrame frame, String[] args) {
+    public Code() {
 
-        // Initialize frame
-        this.frame = frame;
+        // Attempt to load config file 
+        Path configPath = Paths.get(configPathS);
+        String configFull = "";
+        try {
+            configFull = Files.readString(configPath);
+        } catch (IOException e) {
 
-        // If the number of arguments is invalid
-        if (args.length != 2) {
+            // Print error info and exit
+            System.err.println("\nNo config file found. A configuration file");
+            System.err.println("with the properties below is expected");
+            System.err.println("Path: " + configPathS);
+            System.err.println("Format: " + configFormat);
+            System.exit(1);
+        }
+
+        // Extract config parts
+        String[] configParts = configFull.split(",,,");
+
+        // If the number of parts is invalid
+        if (configParts.length != 2) {
 
             // Throw error
-            String errMsg = "Command Line Args: Source, Destination (Folders)";
-            throw new IllegalArgumentException(errMsg);
+            String msg = "Format should be = " + configFormat;
+            throw new IllegalArgumentException(msg);
         }
 
         // Use arguments to initialize path strings
-        src = args[0].replace("_", " ");
-        dest = args[1].replace("_", " ");
-        lastChoicePathS = dest + "\\lastChoice.txt";
-        lastChoicePath = Paths.get(lastChoicePathS);
+        src = configParts[0].trim();
+        dest = configParts[1].trim();
 
         // If they are not both folders
         File srcF = new File(src);
@@ -74,62 +75,12 @@ public class Code {
         if (!(srcF.isDirectory() && destF.isDirectory())) {
 
             // Throw error
-            throw new IllegalArgumentException(
-                    "Source or Dest folder was non-existent");
-        }
-    }
-
-    /**
-     * Run the inputted DOS command and return error output
-     *
-     * @param command
-     */
-    private String runCommand(String command) {
-
-        // Create command list
-        ArrayList<String> cmdList = new ArrayList<>();
-        cmdList.add("cmd");
-        cmdList.add("/c");
-        cmdList.add(command);
-
-        // Run command
-        try {
-            ProcessBuilder pb = new ProcessBuilder();
-            pb.command(cmdList);
-            Process p = pb.start();
-
-            // Print command
-            System.out.println("command: \n" + command);
-
-            // Get error output
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(p.getErrorStream()));
-            String errOut = "";
-            String curLine;
-            while ((curLine = reader.readLine()) != null) {
-                errOut += " " + curLine;
-            }
-
-            // If error line is basically empty, notify
-            if (errOut.length() < 3) {
-                errOut = "None!";
-            }
-
-            // Print error output
-            System.out.println("error output: " + errOut + "\n");
-
-            // Return error output
-            return errOut;
-
-        } catch (IOException e) {
-
-            // Print error info and exit
-            System.err.print(e.toString());
-            System.exit(1);
+            String msg = "Template or dest. folder doesn't exist";
+            throw new IllegalArgumentException(msg);
         }
 
-        // Return empty
-        return "";
+        // Initialize Swing Session
+        sessH = new SessionHandler(dest);
     }
 
     /**
@@ -155,7 +106,29 @@ public class Code {
         // Result string
         String result = "";
 
-        // Add day string
+        // Get day name in sentence case
+        String upperDay = today.getDayOfWeek().toString();
+        String normalDay = "";
+        for (int i = 0; i < upperDay.length(); i++) {
+            // Get current char as String
+            String curCharS = "" + upperDay.charAt(i);
+
+            // Add to final
+            // If first, add as is
+            if (i == 0) {
+                normalDay += curCharS;
+            } else {
+                // Else if not first,
+                // add as lower case
+                normalDay += curCharS.toLowerCase();
+            }
+        }
+
+        // Add day name string
+        result += normalDay;
+        result += " ";
+
+        // Add day number string
         result += getOrdinal(day);
         result += " ";
 
@@ -179,36 +152,6 @@ public class Code {
 
         // Return result
         return result;
-    }
-
-    /**
-     * Saves the given string into a text file
-     *
-     * @param fullChoices Both choices concatenated
-     */
-    public void saveChoices(String fullChoices) {
-        try {
-
-            // If text file exists
-            if (choicesExist()) {
-
-                // Delete it 
-                Files.delete(lastChoicePath);
-            }
-
-            // Recreate the file and write both choices
-            Files.writeString(lastChoicePath, fullChoices, CREATE_NEW);
-
-            // Make file hidden
-            Files.setAttribute(lastChoicePath, "dos:hidden",
-                    Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
-
-        } catch (IOException e) {
-
-            // Print error info and exit
-            System.err.println(e.toString());
-            System.exit(1);
-        }
     }
 
     /**
@@ -242,14 +185,14 @@ public class Code {
         }
 
         // Initialize left combo box
-        initComboBox(options, 1, "Default");
+        initComboBox(options, 0, "Default");
 
         // Add none option and init right combo box
         String[] none = {"None"};
         String[] options2 = Stream.concat(
                 Arrays.stream(none), Arrays.stream(options))
                 .toArray(String[]::new);
-        initComboBox(options2, 2, "None");
+        initComboBox(options2, 1, "None");
     }
 
     /**
@@ -261,31 +204,33 @@ public class Code {
      */
     public void initComboBox(String[] options, int boxInd, String def) {
 
+        // Get name of combo box
+        String cbName = SessionHandler.compNames[boxInd];
+
         // Turn the options into a combo box model
         JComboBox tempBox = new JComboBox(options);
         ComboBoxModel cbm = tempBox.getModel();
 
         // If previous choices exist (program has run before)
-        if (choicesExist()) {
+        if (sessH.doesPrevSessExist()) {
 
-            // Make holder
-            String choiceS = "";
+            // Get previous session
+            Session prevDSS = sessH.getPrevSess();
 
-            try {
+            // Get previous instance of combo box
+            JComboBox prevJCB;
+            prevJCB = (JComboBox) prevDSS.getComp(cbName);
 
-                // Get both choices as a string
-                String full = Files.readString(lastChoicePath);
+            // Extract previous selection
+            String prevSel;
+            prevSel = (String) prevJCB.getSelectedItem();
 
-                // Separate choices and get desired one
-                choiceS = full.split(",")[boxInd - 1];
-
-            } catch (IOException ex) {
-                Logger.getLogger(Code.class.getName()).log(Level.SEVERE, null, ex);
+            // If previous template still exists
+            if (isValidTemplate(prevSel)) // Refine it
+            {
+                // Make the previous choice the default selection
+                cbm.setSelectedItem(prevSel);
             }
-
-            // Make the last choice the initial/default selection
-            cbm.setSelectedItem((Object) choiceS);
-
         } else {
 
             // Else if there is no last choice:
@@ -296,66 +241,68 @@ public class Code {
                 cbm.setSelectedItem(cbm.getElementAt(0));
 
             } else {
+
                 // Otherwise, make inputted string the default option
                 cbm.setSelectedItem(def);
             }
         }
 
-        // Retrieve actual combo box and load in options (with default set)
-        String CBName = comboPrefix + boxInd;
-        ((JComboBox) getComponentByName(CBName)).setModel(cbm);
+        // Retrieve actual combo box and update options + default
+        ((JComboBox) GUI.gui.getComponentByName(cbName))
+                .setModel(cbm);
     }
 
     /**
-     * Retrieve a component by its name
+     * Process a given combo box
      *
-     * @param nameQuery The wanted component's name
-     * @return
+     * @param boxComp
      */
-    public Component getComponentByName(String nameQuery) {
+    public void processComboBox(Component boxComp) {
 
-        // Return variable
-        Component comp = null;
+        // Get path to template selected
+        JComboBox jcb = (JComboBox) boxComp;
+        String tempS = (String) jcb.getModel().getSelectedItem();
+        String tempName = "\\" + tempS + "T.docx";
 
-        // Get all components
-        JRootPane jrp = (JRootPane) frame.getComponents()[0];
-        Container cp = (Container) jrp.getContentPane();
-        JPanel jp = (JPanel) cp.getComponents()[0];
-        Component[] parts = jp.getComponents();
+        // Copy template from source to destination
+        copyTemplate(tempName);
 
-        // Iterate over all parts
-        for (Component curComp : parts) {
+        // Get tomorrow status
+        JToggleButton tmrwBut;
+        tmrwBut = (JToggleButton) GUI.gui.getComponentByName("tmrwBut");
+        boolean shortTmrwText = tmrwBut.getText().length() < 6;
 
-            // When name matches, save and stop
-            if (nameQuery.equalsIgnoreCase(curComp.getName())) {
-                comp = curComp;
-                break;
-            }
-        }
+        // Get new name for template
+        String newName = getNewName(tempS, shortTmrwText);
 
-        // Return component
-        return comp;
+        // Rename template made
+        renameTemplate(tempName, newName);
+
+        // Open template
+        openTemplate(tempName);
     }
 
     /**
-     * Rename the template made in the destination
+     * Rename the template that was copied to the destination
      *
      * @param tempName The template name
      * @param newName The new name
      */
     public void renameTemplate(String tempName, String newName) {
 
-        // Create command string
-        String commStr = "rename \"" + dest + tempName + "\" \"" + newName + "\"";
-
-        // Run command and save output
-        String errOut = runCommand(commStr);
+        // Create and run command
+        String progName = "rename";
+        String[] args = new String[2];
+        args[0] = quote(dest + tempName);
+        args[1] = quote(newName);
+        Command comm = new Command(progName, args);
+        comm.run();
 
         // If output indicates duplicate error
-        if (errOut.contains("duplicate")) {
+        if (comm.getErrOutput().contains("duplicate")) {
 
             // This means the template already exists,
-            // so delete the intermediate file
+            // so delete the intermediate (unrenamed) file
             try {
                 Files.delete(Paths.get(dest + tempName));
                 System.out.println("Deleted duplicate intermediate file");
@@ -387,26 +334,73 @@ public class Code {
     }
 
     /**
-     * Returns true if the last choice file already exists, and false otherwise
-     *
-     * @return
-     */
-    private boolean choicesExist() {
-
-        // Attempt to load last choice file
-        File lcFile = new File(lastChoicePathS);
-
-        // Return whether it is a valid file
-        return lcFile.isFile();
-    }
-
-    /**
      * Copy the template from the source to the destination
      *
      * @param tempName
      */
     public void copyTemplate(String tempName) {
-        runCommand("copy \"" + src + tempName + "\" \"" + dest + "\"");
+
+        // Create and run command
+        String progName = "copy";
+        String[] args = new String[2];
+        args[0] = quote(src + tempName);
+        args[1] = quote(dest);
+        Command comm = new Command(progName, args);
+        comm.run();
     }
 
+    /**
+     * Open a given template
+     *
+     * @param tempName
+     */
+    public void openTemplate(String tempName) {
+
+        // Create and run command
+        String progName = "explorer.exe";
+        String[] args = new String[1];
+        args[0] = quote(src + tempName);
+        Command comm = new Command(progName, args);
+        comm.run();
+    }
+
+    /**
+     * Process selections
+     */
+    public void procSel() {
+
+        // Extract/Save session
+        sessH.save();
+
+        // Do actions associated with selections
+        Session dss = sessH.getPrevSess();
+        processComboBox(dss.getComp(SessionHandler.compNames[0]));
+        processComboBox(dss.getComp(SessionHandler.compNames[1]));
+    }
+
+    /**
+     * Returns true if the given template exists
+     *
+     * @param prevSel
+     * @return
+     */
+    private boolean isValidTemplate(String prevSel) {
+
+        // Create full path
+        String fullPath = src + "\\";
+        fullPath += prevSel + "T.docx";
+
+        // Return true if file exists
+        return (new File(fullPath)).isFile();
+    }
+
+    /**
+     * Returns a given string with quotations
+     *
+     * @param s
+     * @return
+     */
+    private String quote(String s) {
+        return "\"" + s + "\"";
+    }
 }

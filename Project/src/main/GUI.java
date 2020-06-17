@@ -1,11 +1,15 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.io.IOException;
-import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -17,14 +21,15 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
  *
  * @author David C
  */
-public class Window extends javax.swing.JFrame {
+public class GUI extends JFrame {
 
-    // Version
-    public static final double VERSION = 1.2;
+    // Program information
+    public static final String PROGRAM = "DayStarter";
+    public static final double VERSION = 1.3;
 
     // Main objects
     private static Code code;
-    private static Window gui;
+    public static GUI gui;
 
     /**
      * Main method entry point
@@ -45,17 +50,15 @@ public class Window extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             try {
                 // Initialize GUI and tools
-                gui = new Window();
-                code = new Code(gui, args);
+                gui = new GUI();
+                code = new Code();
 
                 // Make adjustments to frame
                 gui.setVisible(true);
-                gui.setTitle("DayStarter V" + VERSION + " - by David C, 2019");
-
+                gui.setTitle(PROGRAM + " V" + VERSION + " - by David C, 2020");
                 Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
                 int frameXPos = ((int) screen.getWidth() / 2) - (gui.getWidth() / 2);
                 gui.setLocation(frameXPos, 39);
-
                 gui.setResizable(false);
                 gui.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -67,13 +70,43 @@ public class Window extends javax.swing.JFrame {
                 System.exit(1);
             }
         });
+    }
 
+    /**
+     * Retrieve a component by its name
+     *
+     * @param nameQuery The wanted component's name
+     * @return
+     */
+    public Component getComponentByName(String nameQuery) {
+
+        // Return variable
+        Component comp = null;
+
+        // Get all components
+        JRootPane jrp = (JRootPane) gui.getComponents()[0];
+        Container cp = (Container) jrp.getContentPane();
+        JPanel jp = (JPanel) cp.getComponents()[0];
+        Component[] parts = jp.getComponents();
+
+        // Iterate over all parts
+        for (Component curComp : parts) {
+
+            // When name matches, save and stop
+            if (nameQuery.equalsIgnoreCase(curComp.getName())) {
+                comp = curComp;
+                break;
+            }
+        }
+
+        // Return component
+        return comp;
     }
 
     /**
      * Creates GUI
      */
-    public Window() {
+    public GUI() {
         initComponents();
     }
 
@@ -122,7 +155,6 @@ public class Window extends javax.swing.JFrame {
         jMenuItem6.setText("jMenuItem6");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 450));
         setResizable(false);
         setSize(new java.awt.Dimension(800, 450));
 
@@ -166,11 +198,6 @@ public class Window extends javax.swing.JFrame {
         combo2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "None" }));
         combo2.setBorder(null);
         combo2.setName("combo2"); // NOI18N
-        combo2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                combo2ActionPerformed(evt);
-            }
-        });
 
         question2.setFont(new java.awt.Font("Candara", 1, 24)); // NOI18N
         question2.setForeground(new java.awt.Color(0, 0, 0));
@@ -198,11 +225,6 @@ public class Window extends javax.swing.JFrame {
         combo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "None" }));
         combo1.setBorder(null);
         combo1.setName("combo1"); // NOI18N
-        combo1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                combo1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
@@ -296,56 +318,12 @@ public class Window extends javax.swing.JFrame {
      */
     private void startButAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButAction
 
-        // Holder
-        String choices = "";
-
-        // Process combo boxes and save choices
-        choices += processComboBox(1);
-        choices += ",";
-        choices += processComboBox(2);
-
-        // Save choices made
-        code.saveChoices(choices);
+        // Process selections
+        code.procSel();
 
         // Finish normally
         System.exit(0);
     }//GEN-LAST:event_startButAction
-
-    /**
-     * Process a given combo box
-     *
-     * @param CBnum
-     * @return
-     */
-    private String processComboBox(int CBnum) {
-
-        // Get path to template selected
-        String CBname = Code.comboPrefix + CBnum;
-        JComboBox tempBut = (JComboBox) code.getComponentByName(CBname);
-        String tempS = (String) tempBut.getModel().getSelectedItem();
-        String tempName = "\\" + tempS + "T.docx";
-
-        // Copy template from source to destination
-        code.copyTemplate(tempName);
-
-        // Get tomorrow status and new name
-        JToggleButton tmrwBut = (JToggleButton) code.getComponentByName("tmrwBut");
-        String newName = code.getNewName(tempS, tmrwBut.getText().length() < 6);
-
-        // Rename template made
-        code.renameTemplate(tempName, newName);
-
-        // Return choice
-        return tempS;
-    }
-
-    private void combo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_combo2ActionPerformed
-
-    private void combo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_combo1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
