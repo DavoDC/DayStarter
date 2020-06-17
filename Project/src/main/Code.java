@@ -259,9 +259,16 @@ public class Code {
      */
     public void processComboBox(Component boxComp) {
 
-        // Get path to template selected
+        // Extract combo box selection
         JComboBox jcb = (JComboBox) boxComp;
         String tempS = (String) jcb.getModel().getSelectedItem();
+
+        // Do not process further is selection is none
+        if (tempS.equalsIgnoreCase("None")) {
+            return;
+        }
+
+        // Infer template name
         String tempName = "\\" + tempS + "T.docx";
 
         // Copy template from source to destination
@@ -279,7 +286,7 @@ public class Code {
         renameTemplate(tempName, newName);
 
         // Open template
-        openTemplate(tempName);
+        openTemplate(newName);
     }
 
     /**
@@ -359,7 +366,7 @@ public class Code {
         // Create and run command
         String progName = "explorer.exe";
         String[] args = new String[1];
-        args[0] = quote(src + tempName);
+        args[0] = quote(dest + "\\" + tempName);
         Command comm = new Command(progName, args);
         comm.run();
     }
