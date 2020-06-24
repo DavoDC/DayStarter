@@ -5,7 +5,7 @@
   <jar>C:\Users\David\GitHub Repos\DayStarter\Project\dist\DayStarter.jar</jar>
   <outfile>C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe</outfile>
   <errTitle></errTitle>
-  <cmdLine>C:\Users\David\Google_Drive\Personal\Tasks\Templates\Uni_Time_Templates C:\Users\David\Google_Drive\Personal\Tasks</cmdLine>
+  <cmdLine></cmdLine>
   <chdir>-</chdir>
   <priority>normal</priority>
   <downloadUrl>http://java.com/download</downloadUrl>
