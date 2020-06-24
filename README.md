@@ -1,7 +1,7 @@
 
 ## DayStarter
 
-![Preview](https://github.com/DavoDC/SlickGame/blob/master/Preview.png)
+![Preview](https://github.com/DavoDC/DayStarter/blob/master/Preview.png)
 
 <div></div>
 
