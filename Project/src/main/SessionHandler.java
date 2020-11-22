@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 public class SessionHandler {
 
     // Name of session file
-    private final String fileNameS = GUI.PROGRAM + "SessionInstance.txt";
+    private final String fileNameS = GUI.PROG_DESC + "SessionInstance.txt";
 
     // Component names
     public static final String[] compNames = {"combo1", "combo2"};
@@ -76,7 +76,7 @@ public class SessionHandler {
      *
      * @param dss
      */
-    public void writeSession(Session dss) {
+    private void writeSession(Session dss) {
 
         try {
             // Open output streams
@@ -113,7 +113,7 @@ public class SessionHandler {
             ObjectInputStream oi;
             oi = new ObjectInputStream(fi);
 
-            // Read and save session
+            // Read in session
             Session dss = (Session) oi.readObject();
 
             // Close streams

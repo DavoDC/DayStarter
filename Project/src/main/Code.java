@@ -24,7 +24,7 @@ import javax.swing.JToggleButton;
 public class Code {
 
     // Configuration
-    private final String configPathS = ".//" + GUI.PROGRAM + "Config.ini";
+    private final String configPathS = ".//" + GUI.PROG_DESC + "Config.ini";
     private final String configFormat = "TemplateFolder,,,DestFolder";
 
     // Path strings
@@ -39,14 +39,45 @@ public class Code {
      */
     public Code() {
 
-        // Attempt to load config file 
-        Path configPath = Paths.get(configPathS);
-        String configFull = "";
+        // Try to load config file
         try {
-            configFull = Files.readString(configPath);
+
+            // Get path to config file
+            Path configPath = Paths.get(configPathS);
+
+            // Extract contents of config file
+            String configFull = Files.readString(configPath);
+
+            // Extract config parts
+            String[] configParts = configFull.split(",,,");
+
+            // If the number of parts is invalid
+            if (configParts.length != 2) {
+
+                // Throw error
+                String msg = "Format should be = " + configFormat;
+                throw new IllegalArgumentException(msg);
+            }
+
+            // Use arguments to initialize path strings
+            src = configParts[0].trim();
+            dest = configParts[1].trim();
+
+            // Check directories
+            // If they are not both folders
+            File srcF = new File(src);
+            File destF = new File(dest);
+            if (!(srcF.isDirectory() && destF.isDirectory())) {
+
+                // Throw error
+                String msg = "Template or dest. folder doesn't exist";
+                throw new IllegalArgumentException(msg);
+            }
+
         } catch (IOException e) {
 
-            // Print error info and exit
+            // If no config file found,
+            // print error info and exit
             System.err.println("\nNo config file found. A configuration file");
             System.err.println("with the properties below is expected");
             System.err.println("Path: " + configPathS);
@@ -54,33 +85,46 @@ public class Code {
             System.exit(1);
         }
 
-        // Extract config parts
-        String[] configParts = configFull.split(",,,");
+        // Try to scan the source directory for templates,
+        // and load them into the combo boxes
+        try {
 
-        // If the number of parts is invalid
-        if (configParts.length != 2) {
+            // Get paths of the Word documents in the source folder
+            Stream<Path> walk = Files.walk(Paths.get(src));
+            Object[] optionsRaw = walk.map(x -> x.toString()).
+                    filter(f -> f.endsWith(".docx")).toArray();
 
-            // Throw error
-            String msg = "Format should be = " + configFormat;
-            throw new IllegalArgumentException(msg);
+            // Convert the file paths to file name strings
+            String[] options = new String[optionsRaw.length];
+            int index = 0;
+            for (Object ob : optionsRaw) {
+
+                // Get current string
+                String curS = (String) ob;
+
+                // Refine it
+                curS = curS.replace(src + "\\", "");
+                curS = curS.replace("T.docx", "");
+
+                // Add it to the list
+                options[index] = curS;
+                index++;
+            }
+
+            // Initialize left combo box
+            initComboBox(options, 0, "Default");
+
+            // Add none option 
+            String[] none = {"None"};
+            String[] options2 = Stream.concat(
+                    Arrays.stream(none), Arrays.stream(options))
+                    .toArray(String[]::new);
+
+            // Initialize right combo box
+            initComboBox(options2, 1, "None");
+        } catch (IOException ex) {
+            // This is impossible as the src path has been checked
         }
-
-        // Use arguments to initialize path strings
-        src = configParts[0].trim();
-        dest = configParts[1].trim();
-
-        // If they are not both folders
-        File srcF = new File(src);
-        File destF = new File(dest);
-        if (!(srcF.isDirectory() && destF.isDirectory())) {
-
-            // Throw error
-            String msg = "Template or dest. folder doesn't exist";
-            throw new IllegalArgumentException(msg);
-        }
-
-        // Initialize Swing Session
-        sessH = new SessionHandler(dest);
     }
 
     /**
@@ -92,54 +136,38 @@ public class Code {
      */
     public String getNewName(String tempName, boolean tomorrow) {
 
-        // Get date information
-        LocalDate today = LocalDate.now();
-        int year = today.getYear();
-        int month = today.getMonthValue();
-        int day = today.getDayOfMonth();
+        // Get current date
+        LocalDate date = LocalDate.now();
 
-        // Add one to day if tomorrow is wanted
+        // If tomorrow wanted
         if (tomorrow) {
-            day++;
+
+            // Shift one day forward
+            date = date.plusDays(1);
         }
 
         // Result string
         String result = "";
 
-        // Get day name in sentence case
-        String upperDay = today.getDayOfWeek().toString();
-        String normalDay = "";
-        for (int i = 0; i < upperDay.length(); i++) {
-            // Get current char as String
-            String curCharS = "" + upperDay.charAt(i);
-
-            // Add to final
-            // If first, add as is
-            if (i == 0) {
-                normalDay += curCharS;
-            } else {
-                // Else if not first,
-                // add as lower case
-                normalDay += curCharS.toLowerCase();
-            }
-        }
-
-        // Add day name string
-        result += normalDay;
+        // Add day name in sentence case
+        String fullyCapitalizedDay = date.getDayOfWeek().toString();
+        result += getSentenceCase(fullyCapitalizedDay);
         result += " ";
 
         // Add day number string
+        int day = date.getDayOfMonth();
         result += getOrdinal(day);
         result += " ";
 
         // Add month string
+        int month = date.getMonthValue();
         String monthS = Month.of(month).name();
         result += monthS.substring(0, 1);
         result += monthS.toLowerCase().substring(1, 3);
         result += " ";
 
         // Add year
-        result += year;
+        result += date.getYear();
         result += " - ";
 
         // Add type
@@ -155,54 +183,21 @@ public class Code {
     }
 
     /**
-     * Scan the source directory for templates, and load them into the combo
-     * boxes
-     *
-     * @throws java.io.IOException If path is not found
-     */
-    public void loadOptions() throws IOException {
-
-        // Get paths of the Word documents in the source folder
-        Stream<Path> walk = Files.walk(Paths.get(src));
-        Object[] optionsRaw = walk.map(x -> x.toString()).
-                filter(f -> f.endsWith(".docx")).toArray();
-
-        // Convert the file paths to file name strings
-        String[] options = new String[optionsRaw.length];
-        int index = 0;
-        for (Object ob : optionsRaw) {
-
-            // Get current string
-            String curS = (String) ob;
-
-            // Refine it
-            curS = curS.replace(src + "\\", "");
-            curS = curS.replace("T.docx", "");
-
-            // Add it to the list
-            options[index] = curS;
-            index++;
-        }
-
-        // Initialize left combo box
-        initComboBox(options, 0, "Default");
-
-        // Add none option and init right combo box
-        String[] none = {"None"};
-        String[] options2 = Stream.concat(
-                Arrays.stream(none), Arrays.stream(options))
-                .toArray(String[]::new);
-        initComboBox(options2, 1, "None");
-    }
-
-    /**
      * Initialize the options of a given combo box
      *
      * @param options The options as an array of strings
      * @param boxInd Which combo box to initialize (1 or 2)
      * @param def Default option to use when there are no last choices
      */
-    public void initComboBox(String[] options, int boxInd, String def) {
+    public final void initComboBox(String[] options, int boxInd, String def) {
+
+        // If session handler is not initialized
+        if (sessH == null) {
+
+            // Initialize session handler,
+            // so previous options may be loaded
+            sessH = new SessionHandler(dest);
+        }
 
         // Get name of combo box
         String cbName = SessionHandler.compNames[boxInd];
@@ -226,14 +221,14 @@ public class Code {
             prevSel = (String) prevJCB.getSelectedItem();
 
             // If previous template still exists
-            if (isValidTemplate(prevSel)) // Refine it
-            {
+            if (isValidTemplate(prevSel)) {
+
                 // Make the previous choice the default selection
                 cbm.setSelectedItem(prevSel);
             }
         } else {
 
-            // Else if there is no last choice:
+            // Else if there is no previous session / last choice:
             // If default selection wanted
             if (def.equalsIgnoreCase("Default")) {
 
@@ -248,8 +243,7 @@ public class Code {
         }
 
         // Retrieve actual combo box and update options + default
-        ((JComboBox) GUI.gui.getComponentByName(cbName))
-                .setModel(cbm);
+        ((JComboBox) GUI.gui.getComponentByName(cbName)).setModel(cbm);
     }
 
     /**
@@ -277,10 +271,10 @@ public class Code {
         // Get tomorrow status
         JToggleButton tmrwBut;
         tmrwBut = (JToggleButton) GUI.gui.getComponentByName("tmrwBut");
-        boolean shortTmrwText = tmrwBut.getText().length() < 6;
+        boolean tmrwOn = tmrwBut.isSelected();
 
         // Get new name for template
-        String newName = getNewName(tempS, shortTmrwText);
+        String newName = getNewName(tempS, tmrwOn);
 
         // Rename template made
         renameTemplate(tempName, newName);
@@ -318,6 +312,40 @@ public class Code {
                 Logger.getLogger(Code.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    /**
+     * Get string with first letter capitalized and the rest lower case
+     *
+     * @param input
+     * @return
+     */
+    private String getSentenceCase(String input) {
+
+        // Holder
+        String output = "";
+
+        // For every character in string
+        for (int i = 0; i < input.length(); i++) {
+
+            // Get current char as String
+            String curCharS = "" + input.charAt(i);
+
+            // If first character
+            if (i == 0) {
+
+                // Add as upper case
+                output += curCharS.toUpperCase();
+            } else {
+
+                // Else if not first,
+                // add as lower case
+                output += curCharS.toLowerCase();
+            }
+        }
+
+        // Return output
+        return output;
     }
 
     /**

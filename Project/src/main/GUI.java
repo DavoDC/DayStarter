@@ -6,7 +6,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
-import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
@@ -25,7 +24,8 @@ public class GUI extends JFrame {
 
     // Program information
     public static final String PROGRAM = "DayStarter";
-    public static final double VERSION = 1.3;
+    public static final double VERSION = 1.4;
+    public static final String PROG_DESC = GUI.PROGRAM + GUI.VERSION;
 
     // Main objects
     private static Code code;
@@ -49,11 +49,8 @@ public class GUI extends JFrame {
         // Create GUI
         java.awt.EventQueue.invokeLater(() -> {
             try {
-                // Initialize GUI and tools
+                // Initialize GUI and adjust frame
                 gui = new GUI();
-                code = new Code();
-
-                // Make adjustments to frame
                 gui.setVisible(true);
                 gui.setTitle(PROGRAM + " V" + VERSION + " - by David C, 2020");
                 Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -62,10 +59,10 @@ public class GUI extends JFrame {
                 gui.setResizable(false);
                 gui.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-                // Setup list of possible template options
-                code.loadOptions();
+                // Initialize backend and add options
+                code = new Code();
 
-            } catch (HeadlessException | IOException e) {
+            } catch (HeadlessException e) {
                 System.err.print(e.toString());
                 System.exit(1);
             }
@@ -295,19 +292,27 @@ public class GUI extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * The actions of the 'tomorrow button'
+     * The Tomorrow button toggles between two colour-text pairs
      *
      * @param evt
      */
     private void tmrwButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tmrwButActionPerformed
 
-        // Toggle between yellow and purple
-        if (((JToggleButton) evt.getSource()).getBackground().equals(Color.magenta)) {
-            ((JToggleButton) evt.getSource()).setBackground(Color.yellow);
-            ((JToggleButton) evt.getSource()).setText("I'm focusing on the present");
+        // Extract button
+        JToggleButton jtb = ((JToggleButton) evt.getSource());
+
+        // If background is magenta
+        if (jtb.getBackground().equals(Color.magenta)) {
+
+            // Change to yellow and update text
+            jtb.setBackground(Color.yellow);
+            jtb.setText("I'm focusing on the present");
         } else {
-            ((JToggleButton) evt.getSource()).setBackground(Color.magenta);
-            ((JToggleButton) evt.getSource()).setText("Yes!");
+
+            // Else if background is yellow,
+            // change back to magenta and relevant text
+            jtb.setBackground(Color.magenta);
+            jtb.setText("Yes!");
         }
     }//GEN-LAST:event_tmrwButActionPerformed
 

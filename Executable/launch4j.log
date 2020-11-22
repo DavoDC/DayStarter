@@ -1,0 +1,24 @@
+
+
+Version:	3.12
+CmdLine:	C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe --l4j-debug
+WOW64:		yes
+Create mutex:	DayStarter
+Working dir:	C:\Users\David\GitHub Repos\DayStarter\Executable\-
+Java min ver:	1.002.000
+Java max ver:	1.100.000
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+32-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+32-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+64-bit search:	SOFTWARE\JavaSoft\JRE...
+32-bit search:	SOFTWARE\JavaSoft\JRE...
+64-bit search:	SOFTWARE\JavaSoft\JDK...
+Check:		SOFTWARE\JavaSoft\JDK\14.0.2
+Check launcher:	C:\DevTools\Java\jdk-14.0.2\bin\javaw.exe (OK)
+Match:		1.014.000_002
+Runtime used:	1.014.000_002 (64-bit)
+Launcher:	C:\DevTools\Java\jdk-14.0.2\bin\javaw.exe
+Launcher args:	-jar "C:\Users\David\GitHub Repos\DayStarter\Executable\DayStarter.exe"
+Args length:	71/32768 chars
+Exit code:	0
