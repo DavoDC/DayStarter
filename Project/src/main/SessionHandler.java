@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -29,14 +28,13 @@ public class SessionHandler {
     private final Path pathObj;
 
     /**
-     * Initialize
+     * Initialize session handler
      *
-     * @param dest
      */
-    public SessionHandler(String dest) {
+    public SessionHandler() {
 
         // Initialize path objects
-        fullPathS = dest + "\\" + fileNameS;
+        fullPathS = Code.configFolder + "\\" + fileNameS;
         pathObj = Paths.get(fullPathS);
     }
 
@@ -58,10 +56,6 @@ public class SessionHandler {
 
             // Write session to file
             writeSession(sess);
-
-            // Make file hidden
-            Files.setAttribute(pathObj, "dos:hidden", true,
-                    LinkOption.NOFOLLOW_LINKS);
 
         } catch (IOException e) {
 
@@ -138,6 +132,6 @@ public class SessionHandler {
      * @return
      */
     public boolean doesPrevSessExist() {
-        return (new File(fullPathS)).isFile();
+        return Code.isFile(fullPathS);
     }
 }

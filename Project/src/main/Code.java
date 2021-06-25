@@ -23,15 +23,23 @@ import javax.swing.JToggleButton;
  */
 public class Code {
 
-    // Configuration
-    private final String configPathS = ".//" + GUI.PROG_DESC + "Config.ini";
-    private final String configFormat = "TemplateFolder,,,DestFolder";
+    // Configuration paths
+    public static String configFolder;
+    private static String configPathS;
 
-    // Path strings
-    private static String src;
-    private static String dest;
+    // Config settings
+    private final String configFileName = GUI.PROG_DESC + "Config.ini";
+    private final String configSep = ",,,";
+    private final String configFormat = "TemplateFolder" + configSep + "DestFolder";
+    private final int configLines = 2;
 
-    // Swing session
+    // Template folder path (source)
+    private static String tempFolder;
+
+    // Destination folder path (holds copies)
+    private static String destFolder;
+
+    // Swing session handler
     private SessionHandler sessH;
 
     /**
@@ -39,58 +47,110 @@ public class Code {
      */
     public Code() {
 
+        // Notify
+        System.out.println("\nWelcome to DayStarter!\n");
+
         // Try to load config file
         try {
 
-            // Get path to config file
-            Path configPath = Paths.get(configPathS);
+            // Initialize config folder path
+            configFolder = System.getProperty("java.io.tmpdir");
+            configFolder += "DayStarter";
 
-            // Extract contents of config file
-            String configFull = Files.readString(configPath);
+            // If config folder doesn't exist
+            if (!isFolder(configFolder)) {
+
+                // Make config folder
+                Files.createDirectories(Paths.get(configFolder));
+
+                // Notify
+                System.out.println("Made config folder: "
+                        + quote(configFolder));
+            }
+
+            // Initialize config file path string and object
+            configPathS = configFolder + "\\" + configFileName;
+            Path configPathO = Paths.get(configPathS);
+
+            // If config file doesn't exist
+            if (!isFile(configPathS)) {
+
+                // Make dummy config file
+                Files.writeString(configPathO, configFormat);
+
+                // Notify
+                System.out.println("Made dummy config file: "
+                        + quote(configPathS));
+                System.out.println("Please edit file and run the program again.");
+
+                // Throw error 
+                String msg = "\nUninitialized config file";
+                throw new IllegalArgumentException(msg);
+            }
 
             // Extract config parts
-            String[] configParts = configFull.split(",,,");
+            String configFull = Files.readString(configPathO);
+            String[] configParts = configFull.split(configSep);
 
             // If the number of parts is invalid
-            if (configParts.length != 2) {
+            if (configParts.length != configLines) {
 
                 // Throw error
-                String msg = "Format should be = " + configFormat;
+                String msg = "\nWrong format";
                 throw new IllegalArgumentException(msg);
             }
 
             // Use arguments to initialize path strings
-            src = configParts[0].trim();
-            dest = configParts[1].trim();
+            tempFolder = configParts[0].trim();
+            destFolder = configParts[1].trim();
 
-            // Check directories
-            // If they are not both folders
-            File srcF = new File(src);
-            File destF = new File(dest);
-            if (!(srcF.isDirectory() && destF.isDirectory())) {
+            // If template folder is invalid
+            if (!isFolder(tempFolder)) {
 
                 // Throw error
-                String msg = "Template or dest. folder doesn't exist";
+                String msg = "\nTemplate folder doesn't exist.\n";
+                msg += quote(tempFolder) + " is not a valid folder path.";
                 throw new IllegalArgumentException(msg);
             }
 
-        } catch (IOException e) {
+            // If destination folder is invalid
+            if (!isFolder(destFolder)) {
 
-            // If no config file found,
-            // print error info and exit
-            System.err.println("\nNo config file found. A configuration file");
-            System.err.println("with the properties below is expected");
-            System.err.println("Path: " + configPathS);
-            System.err.println("Format: " + configFormat);
+                // Throw error
+                String msg = "\nDestination folder doesn't exist.\n";
+                msg += quote(destFolder) + " is not a valid folder path.";
+                throw new IllegalArgumentException(msg);
+            }
+
+        } catch (IOException | IllegalArgumentException e) {
+
+            // If there are any issues with configuration:
+            // Notify (with System.out for better ordering)
+            System.out.println("\nConfiguration issue!");
+            System.out.println("\nSpecific issue: " + e.getMessage());
+
+            System.out.println("\nA configuration file");
+            System.out.println("with the properties below is expected");
+            System.out.println("Path: " + configPathS);
+            System.out.println("Format: " + configFormat);
+            System.out.println("i.e. Format is:");
+            System.out.println("1st line = Folder holding templates");
+            System.out.println("2nd line = Separator (" + configSep + ")");
+            System.out.println("3rd line = Destination folder for copies");
+
+            // Exit with error
             System.exit(1);
         }
+
+        // Notify
+        System.out.println("Configuration successful!");
 
         // Try to scan the source directory for templates,
         // and load them into the combo boxes
         try {
 
             // Get paths of the Word documents in the source folder
-            Stream<Path> walk = Files.walk(Paths.get(src));
+            Stream<Path> walk = Files.walk(Paths.get(tempFolder));
             Object[] optionsRaw = walk.map(x -> x.toString()).
                     filter(f -> f.endsWith(".docx")).toArray();
 
@@ -103,7 +163,7 @@ public class Code {
                 String curS = (String) ob;
 
                 // Refine it
-                curS = curS.replace(src + "\\", "");
+                curS = curS.replace(tempFolder + "\\", "");
                 curS = curS.replace("T.docx", "");
 
                 // Add it to the list
@@ -196,7 +256,7 @@ public class Code {
 
             // Initialize session handler,
             // so previous options may be loaded
-            sessH = new SessionHandler(dest);
+            sessH = new SessionHandler();
         }
 
         // Get name of combo box
@@ -294,7 +354,7 @@ public class Code {
         // Create and run command
         String progName = "rename";
         String[] args = new String[2];
-        args[0] = quote(dest + tempName);
+        args[0] = quote(destFolder + tempName);
         args[1] = quote(newName);
         Command comm = new Command(progName, args);
         comm.run();
@@ -305,7 +365,7 @@ public class Code {
             // This means the template already exists,
             // so delete the intermediate (unrenamed) file
             try {
-                Files.delete(Paths.get(dest + tempName));
+                Files.delete(Paths.get(destFolder + tempName));
                 System.out.println("Deleted duplicate intermediate file");
 
             } catch (IOException ex) {
@@ -378,8 +438,8 @@ public class Code {
         // Create and run command
         String progName = "copy";
         String[] args = new String[2];
-        args[0] = quote(src + tempName);
-        args[1] = quote(dest);
+        args[0] = quote(tempFolder + tempName);
+        args[1] = quote(destFolder);
         Command comm = new Command(progName, args);
         comm.run();
     }
@@ -394,7 +454,7 @@ public class Code {
         // Create and run command
         String progName = "explorer.exe";
         String[] args = new String[1];
-        args[0] = quote(dest + "\\" + tempName);
+        args[0] = quote(destFolder + "\\" + tempName);
         Command comm = new Command(progName, args);
         comm.run();
     }
@@ -422,11 +482,35 @@ public class Code {
     private boolean isValidTemplate(String prevSel) {
 
         // Create full path
-        String fullPath = src + "\\";
+        String fullPath = tempFolder + "\\";
         fullPath += prevSel + "T.docx";
 
         // Return true if file exists
-        return (new File(fullPath)).isFile();
+        return isFile(fullPath);
+    }
+
+    /**
+     * Returns true if given path is a file and false otherwise
+     *
+     * @param filePath
+     * @return
+     */
+    public static boolean isFile(String filePath) {
+
+        // Return true if path is a file
+        return (new File(filePath)).isFile();
+    }
+
+    /**
+     * Returns true if given path is a folder and false otherwise
+     *
+     * @param folderPath
+     * @return
+     */
+    public static boolean isFolder(String folderPath) {
+
+        // Return true if path is a directory
+        return (new File(folderPath)).isDirectory();
     }
 
     /**
@@ -435,7 +519,7 @@ public class Code {
      * @param s
      * @return
      */
-    private String quote(String s) {
+    public static String quote(String s) {
         return "\"" + s + "\"";
     }
 }

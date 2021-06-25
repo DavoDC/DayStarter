@@ -34,7 +34,7 @@ public class GUI extends JFrame {
     /**
      * Main method entry point
      *
-     * @param args the command line arguments
+     * @param args the command line arguments (unused)
      */
     public static void main(String args[]) {
 
