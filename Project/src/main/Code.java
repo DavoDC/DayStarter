@@ -55,6 +55,11 @@ public class Code {
 
             // Initialize config folder path
             configFolder = System.getProperty("java.io.tmpdir");
+
+            // Don't put in temp
+            configFolder = configFolder.replace("\\Temp", "");
+
+            // Put in DayStarter folder
             configFolder += "DayStarter";
 
             // If config folder doesn't exist
@@ -75,13 +80,18 @@ public class Code {
             // If config file doesn't exist
             if (!isFile(configPathS)) {
 
-                // Make dummy config file
-                Files.writeString(configPathO, configFormat);
+                // Make dummy/default config file
+                String myTemp = "C:\\Users\\David\\Google Drive"
+                        + "\\Tasks\\Templates\\Uni Time";
+                String myDest = "C:\\Users\\David\\Google Drive\\Tasks";
+                String defDirs = myTemp + configSep + myDest;
+                Files.writeString(configPathO, defDirs);
 
                 // Notify
-                System.out.println("Made dummy config file: "
+                System.out.println("Made dummy/default config file: "
                         + quote(configPathS));
-                System.out.println("Please edit file and run the program again.");
+                System.out.println("Please edit file if needed,");
+                System.out.println("and run the program again.");
 
                 // Throw error 
                 String msg = "\nUninitialized config file";
@@ -153,6 +163,17 @@ public class Code {
             Stream<Path> walk = Files.walk(Paths.get(tempFolder));
             Object[] optionsRaw = walk.map(x -> x.toString()).
                     filter(f -> f.endsWith(".docx")).toArray();
+
+            // If there are no templates in template folder
+            if (optionsRaw.length == 0) {
+                
+                // Notify
+                System.out.println("\nTemplate folder empty!");
+                System.out.println("\nStart button disabled!");
+                
+                // Disable start button
+                GUI.gui.getComponentByName("startBut").setEnabled(false);
+            }
 
             // Convert the file paths to file name strings
             String[] options = new String[optionsRaw.length];
@@ -263,8 +284,9 @@ public class Code {
         String cbName = SessionHandler.compNames[boxInd];
 
         // Turn the options into a combo box model
-        JComboBox tempBox = new JComboBox(options);
-        ComboBoxModel cbm = tempBox.getModel();
+        JComboBox<String> tempBox;
+        tempBox = new JComboBox<>(options);
+        ComboBoxModel<String> cbm = tempBox.getModel();
 
         // If previous choices exist (program has run before)
         if (sessH.doesPrevSessExist()) {
@@ -303,7 +325,7 @@ public class Code {
         }
 
         // Retrieve actual combo box and update options + default
-        ((JComboBox) GUI.gui.getComponentByName(cbName)).setModel(cbm);
+        ((JComboBox<String>) GUI.gui.getComponentByName(cbName)).setModel(cbm);
     }
 
     /**
